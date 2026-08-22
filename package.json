@@ -1,8 +1,8 @@
 {
   "name": "local-password-locker",
-  "version": "1.0.0",
-  "description": "Friction-based local password locker",
-  "author": "User",
+  "version": "1.0.3",
+  "description": "A privacy-focused desktop application for friction-based password management and obfuscated PIN entry.",
+  "author": "ef4x",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -11,8 +11,15 @@
   "build": {
     "appId": "com.local.passwordlocker",
     "productName": "Local Password Locker",
+    "files": [
+      "main.js",
+      "index.html",
+      "renderer.js",
+      "icon.ico"
+    ],
     "win": {
-      "target": "portable"
+      "target": "portable",
+      "icon": "build/icon.ico"
     }
   },
   "devDependencies": {
