@@ -1,5 +1,5 @@
 {
-  "name": "local-password-locker",
+  "name": "friction-vault",
   "version": "1.1.0",
   "description": "A privacy-focused desktop application for friction-based password management and obfuscated PIN entry.",
   "author": "ef4x",
@@ -9,8 +9,8 @@
     "dist": "electron-builder"
   },
   "build": {
-    "appId": "com.local.passwordlocker",
-    "productName": "Local Password Locker",
+    "appId": "com.frictionvault.app",
+    "productName": "Friction Vault",
     "files": [
       "main.js",
       "index.html",
