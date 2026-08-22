@@ -407,7 +407,7 @@ async function loadVault() {
       : `<button class="secondary" style="margin-right: 6px;" disabled title="Not available until unlocked">Settings</button>`;
 
     const relockBtn = item.requestedAt ? `<button class="secondary" style="margin-right: 6px;" onclick="relockItem('${item.id}')">Relock</button>` : '';
-    const deleteBtn = `<button class="danger" onclick="openDeleteModal('${item.id}', '${escapeString(item.label)}')" ${!isUnlocked ? 'disabled title="Not available until unlocked"' : ''}>Delete</button>`;
+    const deleteBtn = `<button class="danger" onclick="handleDeleteClick('${item.id}', '${encodeURIComponent(item.label)}')" ${!isUnlocked ? 'disabled title="Not available until unlocked"' : ''}>Delete</button>`;
     const secretDisplay = revealedSecrets[item.id] ? `PIN: ${revealedSecrets[item.id]}` : '';
 
     div.innerHTML = `
@@ -448,6 +448,11 @@ window.revealRawPin = async (id) => {
   } else {
     alert(res.error);
   }
+};
+
+window.handleDeleteClick = (id, encodedLabel) => {
+  const label = decodeURIComponent(encodedLabel);
+  openDeleteModal(id, label);
 };
 
 window.startBlindEntry = async (id) => {
