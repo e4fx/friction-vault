@@ -66,8 +66,8 @@ The compiled binary will be placed in the `dist/` directory:
 
 All encrypted data is stored locally in `vault.json` at the standard OS application data location:
 
-* **Windows:** `%APPDATA%\friction-locker\vault.json`
-* **macOS:** `~/Library/Application Support/friction-locker/vault.json`
-* **Linux:** `~/.config/friction-locker/vault.json`
+* **Windows:** `%APPDATA%\friction-vault\vault.json`
+* **macOS:** `~/Library/Application Support/friction-vault/vault.json`
+* **Linux:** `~/.config/friction-vault/vault.json`
 
 *(Deleting `vault.json` directly will completely reset your local storage.)*
