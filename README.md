@@ -2,7 +2,6 @@
 
 A standalone, privacy-focused desktop application designed for friction-based password management. Built specifically to set up screen-time and app blockers on mobile devices without consciously remembering or retaining the passcode.
 Comparable and a good alternative to https://password-locker.com/ but locally.
-This project was made with the assistance of AI.
 
 ---
 
@@ -71,3 +70,7 @@ All encrypted data is stored locally in `vault.json` at the standard OS applicat
 * **Linux:** `~/.config/friction-vault/vault.json`
 
 *(Deleting `vault.json` directly will completely reset your local storage.)*
+
+---
+
+This project was co-authored with an LLM.
