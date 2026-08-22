@@ -45,6 +45,8 @@ let currentPhase = 1;
 let autoplayTimer = null;
 let isCreationMode = true;
 let targetDeleteLabel = '';
+let lastPromptedDigit = null;
+let repeatCount = 0;
 
 const revealedSecrets = {};
 
@@ -97,6 +99,59 @@ function generateObfuscatedSequence(targetPin) {
   }
 
   return steps;
+}
+
+async function handleSecretAccess(id, mode) {
+  const res = await ipcRenderer.invoke('get-secret', id);
+  if (res.error) {
+    alert(res.error);
+    return;
+  }
+
+  if (mode === 'blind') {
+    // Hide any revealed password elements before launching blind entry
+    const passwordDisplay = document.getElementById(`secret-${id}`);
+    if (passwordDisplay) passwordDisplay.style.display = 'none';
+
+    startBlindEntry(res.secret);
+  } else {
+    // Plaintext reveal mode: hide blind entry overlay
+    closeBlindEntryModal();
+    const passwordDisplay = document.getElementById(`secret-${id}`);
+    if (passwordDisplay) {
+      passwordDisplay.textContent = res.secret;
+      passwordDisplay.style.display = 'block';
+    }
+  }
+}
+
+function updateBlindPrompt(targetDigit) {
+  const promptEl = document.getElementById('blind-prompt-text');
+  if (!promptEl) return;
+
+  // Track consecutive repeat counts
+  if (targetDigit === lastPromptedDigit) {
+    repeatCount++;
+  } else {
+    repeatCount = 1;
+    lastPromptedDigit = targetDigit;
+  }
+
+  promptEl.textContent = `Type key for: ${targetDigit}`;
+
+  // Apply danger text color if repeated 2 or more times in a row
+  if (repeatCount >= 2) {
+    promptEl.style.color = '#dc3545'; // Matches red delete button color
+    promptEl.style.fontWeight = 'bold';
+  } else {
+    promptEl.style.color = ''; // Reset to default theme color
+    promptEl.style.fontWeight = 'normal';
+  }
+}
+
+function resetBlindState() {
+  lastPromptedDigit = null;
+  repeatCount = 0;
 }
 
 labelInput.addEventListener('input', () => {
@@ -171,9 +226,19 @@ function renderStep() {
   stepCounter.innerText = `Instruction ${currentStepIndex + 1} of ${sequence.length}`;
 
   if (step.type === 'TYPE') {
-    instructionCard.className = 'instruction-card';
+    let consecutiveSameType = 0;
+    for (let idx = currentStepIndex; idx >= 0; idx--) {
+      if (sequence[idx].type === 'TYPE' && sequence[idx].value === step.value) {
+        consecutiveSameType++;
+      } else {
+        break;
+      }
+    }
+
+    const colorIndex = (consecutiveSameType - 1) % 3;
+    instructionCard.className = `instruction-card type-color-${colorIndex}`;
     instructionText.innerText = `TYPE ${step.value}`;
-    instructionText.className = 'action-text type-action';
+    instructionText.className = `action-text type-action-${colorIndex}`;
   } else {
     let consecutiveDeletes = 0;
     for (let idx = currentStepIndex; idx >= 0; idx--) {
@@ -462,7 +527,8 @@ window.startBlindEntry = async (id) => {
     return;
   }
 
-  revealedSecrets[id] = res.secret;
+  // Prevent PIN from rendering in plain text on background vault list
+  delete revealedSecrets[id];
   activePin = res.secret;
   isCreationMode = false;
   currentPhase = 1;
