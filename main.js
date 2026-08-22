@@ -26,7 +26,7 @@ function decrypt(encryptedObj) {
   );
   decipher.setAuthTag(Buffer.from(encryptedObj.authTag, 'hex'));
   let decrypted = decipher.update(encryptedObj.encryptedData, 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
+  decrypted += decipher.final('utf8');	
   return decrypted;
 }
 
@@ -189,9 +189,15 @@ ipcMain.handle('relock-item', (event, id) => {
 ipcMain.handle('delete-item', (event, id) => {
   let vault = readVault();
   const item = vault.find(i => i.id === id);
-
   if (!item) return { success: false, error: 'Item not found' };
-  if (!item.viewed) return { success: false, error: 'Item must be unlocked and viewed before deletion' };
+
+  const elapsedMs = item.requestedAt ? Date.now() - Number(item.requestedAt) : 0;
+  const requiredMs = (Number(item.frictionMinutes) || 1) * 60 * 1000;
+  const isUnlocked = item.viewed || (item.requestedAt && elapsedMs >= requiredMs);
+
+  if (!isUnlocked) {
+    return { success: false, error: 'Item must be unlocked before deleting.' };
+  }
 
   vault = vault.filter(i => i.id !== id);
   writeVault(vault);
