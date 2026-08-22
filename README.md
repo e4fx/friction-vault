@@ -56,9 +56,9 @@ npm run dist
 
 The compiled binary will be placed in the `dist/` directory:
 
-* **Windows:** `dist/Local Password Locker.exe` (Portable)
-* **macOS:** `dist/Local Password Locker.dmg`
-* **Linux:** `dist/Local Password Locker.AppImage`
+* **Windows:** `dist/Friction Locker 1.0.0.exe` (Portable)
+* **macOS:** `dist/Friction Locker 1.0.0.dmg`
+* **Linux:** `dist/Friction Locker 1.0.0.AppImage`
 
 ---
 
@@ -66,8 +66,8 @@ The compiled binary will be placed in the `dist/` directory:
 
 All encrypted data is stored locally in `vault.json` at the standard OS application data location:
 
-* **Windows:** `%APPDATA%\local-password-locker\vault.json`
-* **macOS:** `~/Library/Application Support/local-password-locker/vault.json`
-* **Linux:** `~/.config/local-password-locker/vault.json`
+* **Windows:** `%APPDATA%\friction-locker\vault.json`
+* **macOS:** `~/Library/Application Support/friction-locker/vault.json`
+* **Linux:** `~/.config/friction-locker/vault.json`
 
 *(Deleting `vault.json` directly will completely reset your local storage.)*
