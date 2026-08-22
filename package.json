@@ -1,6 +1,6 @@
 {
   "name": "friction-vault",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "A privacy-focused desktop application for friction-based password management and obfuscated PIN entry.",
   "author": "ef4x",
   "main": "main.js",
