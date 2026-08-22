@@ -1,8 +1,8 @@
 # Friction Vault: A Local Password Locker
 
 A standalone, privacy-focused desktop application designed for friction-based password management. Built specifically to set up screen-time and app blockers on mobile devices without consciously remembering or retaining the passcode.
-An electron app comparable to https://password-locker.com/ but locally.
-This project was made with assistance from AI tools.
+Comparable and a good alternative to https://password-locker.com/ but locally.
+This project was made with the assistance of AI.
 
 ---
 
