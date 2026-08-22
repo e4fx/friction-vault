@@ -123,6 +123,16 @@ ipcMain.handle('start-unlock', (event, id) => {
   return { success: true };
 });
 
+ipcMain.handle('cancel-unlock', (event, id) => {
+  const vault = readVault();
+  const item = vault.find(i => i.id === id);
+  if (item) {
+    item.requestedAt = null;
+    writeVault(vault);
+  }
+  return { success: true };
+});
+
 ipcMain.handle('get-secret', (event, id) => {
   const vault = readVault();
   const item = vault.find(i => i.id === id);
@@ -146,6 +156,34 @@ ipcMain.handle('get-secret', (event, id) => {
   } catch (err) {
     return { error: 'Decryption failed' };
   }
+});
+
+ipcMain.handle('update-item', (event, { id, label, frictionMinutes }) => {
+  const vault = readVault();
+  const item = vault.find(i => i.id === id);
+  if (!item) return { success: false, error: 'Item not found' };
+
+  const elapsedMs = item.requestedAt ? Date.now() - Number(item.requestedAt) : 0;
+  const requiredMs = (Number(item.frictionMinutes) || 1) * 60 * 1000;
+  const isUnlocked = item.viewed || (item.requestedAt && elapsedMs >= requiredMs);
+
+  if (!isUnlocked) return { success: false, error: 'Item must be unlocked to edit settings' };
+
+  item.label = label;
+  item.frictionMinutes = parseInt(frictionMinutes, 10) || 20;
+  writeVault(vault);
+  return { success: true };
+});
+
+ipcMain.handle('relock-item', (event, id) => {
+  const vault = readVault();
+  const item = vault.find(i => i.id === id);
+  if (item) {
+    item.requestedAt = null;
+    item.viewed = false;
+    writeVault(vault);
+  }
+  return { success: true };
 });
 
 ipcMain.handle('delete-item', (event, id) => {
