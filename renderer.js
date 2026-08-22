@@ -25,7 +25,6 @@ let currentStepIndex = 0;
 let currentPhase = 1;
 let autoplayTimer = null;
 
-// Dynamically scale max decoy buffer to (pinLength - 1)
 function generateObfuscatedSequence(targetPin) {
   const steps = [];
   let currentBufferLength = 0;
@@ -110,17 +109,17 @@ function renderStep() {
     instructionText.innerText = `TYPE ${step.value}`;
     instructionText.className = 'action-text type-action';
   } else {
-    // Count consecutive preceding DELETE instructions
+    // Count consecutive preceding DELETE instructions to determine color
     let consecutiveDeletes = 0;
     for (let idx = currentStepIndex; idx >= 0; idx--) {
       if (sequence[idx].type === 'DELETE') consecutiveDeletes++;
       else break;
     }
 
-    // Cycle through 3 distinct visual colors
+    // Cycle through 3 distinct visual colors without displaying numbers
     const colorIndex = (consecutiveDeletes - 1) % 3;
     instructionCard.className = `instruction-card delete-color-${colorIndex}`;
-    instructionText.innerText = `DELETE (${consecutiveDeletes})`;
+    instructionText.innerText = 'DELETE';
     instructionText.className = 'action-text';
   }
 
