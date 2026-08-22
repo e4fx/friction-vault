@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Local Friction Locker</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; padding: 20px; background: #121212; color: #eee; }
+    .card { background: #1e1e1e; padding: 18px; border-radius: 8px; margin-bottom: 16px; border: 1px solid #333; }
+    .row { display: flex; gap: 12px; margin: 8px 0; }
+    .field { flex: 1; }
+    label { display: block; font-size: 0.8em; color: #aaa; margin-bottom: 4px; }
+    input { width: 100%; padding: 10px; background: #2a2a2a; color: #fff; border: 1px solid #444; border-radius: 4px; box-sizing: border-box; }
+    button { background: #2563eb; color: white; border: none; padding: 10px 16px; border-radius: 4px; cursor: pointer; margin-top: 6px; font-weight: bold; }
+    button.danger { background: #dc2626; }
+    button.secondary { background: #4b5563; }
+    button:disabled { background: #333; cursor: not-allowed; color: #666; }
+    .status { font-size: 0.8em; color: #888; margin-top: 8px; word-break: break-all; }
+    
+    /* Obfuscated Sequence Wizard */
+    #wizardModal { background: #242731; border: 2px solid #2563eb; padding: 20px; border-radius: 12px; text-align: center; margin-top: 12px; display: none; }
+    .instruction-card { background: #111827; padding: 30px; border-radius: 8px; margin: 15px 0; border: 2px solid #374151; min-height: 110px; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: all 0.2s ease; }
+    .action-text { font-size: 2.2rem; font-weight: 800; letter-spacing: 1px; }
+    .type-action { color: #4ade80; }
+    
+    /* Color variations for repeated DELETE commands */
+    .delete-color-0 { color: #f87171; border-color: #991b1b !important; background: #2e0d0d !important; }
+    .delete-color-1 { color: #fb923c; border-color: #9a3412 !important; background: #2e160d !important; }
+    .delete-color-2 { color: #e879f9; border-color: #86198f !important; background: #2b0d2e !important; }
+
+    .controls { display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+    .badge { font-size: 0.8em; padding: 4px 10px; border-radius: 4px; font-weight: bold; display: inline-block; margin-bottom: 8px; }
+    .phase-badge { background: #1d4ed8; color: #eff6ff; }
+    .autoplay-badge { background: #065f46; color: #a7f3d0; }
+    
+    .speed-control { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; background: #111827; padding: 8px 14px; border-radius: 6px; }
+    .speed-control input[type=range] { width: 140px; }
+  </style>
+</head>
+<body>
+  <h2>Local Friction Locker</h2>
+  
+  <div class="card">
+    <h3>Create Phone Blocker Key</h3>
+    <div class="field">
+      <label>Blocker Name</label>
+      <input type="text" id="labelInput" placeholder="e.g., iPhone Screen Time">
+    </div>
+    
+    <div class="row">
+      <div class="field">
+        <label>PIN Length (Default: 4)</label>
+        <input type="number" id="pinLengthInput" value="4" min="4" max="12">
+      </div>
+      <div class="field">
+        <label>Friction Delay (Minutes)</label>
+        <input type="number" id="frictionInput" value="20" min="1">
+      </div>
+    </div>
+    
+    <button id="startWizardBtn">Start 2-Phase Blind Entry</button>
+
+    <div id="wizardModal">
+      <div>
+        <span id="phaseBadge" class="badge phase-badge">PHASE 1: INITIAL ENTRY</span>
+        <span id="autoplayStatus" class="badge autoplay-badge" style="display: none;">AUTOPLAY ACTIVE</span>
+      </div>
+      <h4 id="stepCounter" style="margin: 6px 0 0 0; color: #9ca3af;">Step 1</h4>
+      
+      <div id="instructionCard" class="instruction-card">
+        <div id="instructionText" class="action-text">READY</div>
+      </div>
+
+      <div class="controls">
+        <button id="prevBtn" class="secondary">Previous</button>
+        <button id="nextBtn">Next Step</button>
+        <button id="autoplayBtn" class="secondary">Autoplay</button>
+      </div>
+
+      <div class="speed-control">
+        <label style="margin: 0;">Interval Speed:</label>
+        <input type="range" id="speedSlider" min="0.5" max="3.0" step="0.1" value="1.8">
+        <span id="speedValue" style="font-family: monospace; font-weight: bold;">1.8s</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Vault Items</h3>
+    <div id="vaultList"></div>
+    <div id="vaultPathDisplay" class="status"></div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
