@@ -1,4 +1,4 @@
-# Local Password Locker
+# Friction Vault: A Local Password Locker
 
 A standalone, privacy-focused desktop application designed for friction-based password management. Built specifically to set up screen-time and app blockers on mobile devices without consciously remembering or retaining the passcode.
 
